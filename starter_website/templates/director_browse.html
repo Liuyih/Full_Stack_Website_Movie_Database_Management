@@ -1,0 +1,31 @@
+<html>
+<head><title>Browse director</title></head>
+
+<h1> <a href="/"> Index page </a> </h1>
+
+
+<h3><a href='/add_new_director'>Add new director</a></h3>
+
+<h3><a href='/search_director'>Search director</a></h3>
+
+<h3>Current director</h3>
+<table border='1'>
+    <thead>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td> {{ r[2] }}</td>
+        <td> {{ r.0 }}</td>
+        <td> {{ r[1] }}</td>
+
+        <td> <input type='button' name='Update' value='Update' onclick="window.location = '/update_director/{{r[2]}}'"> </td>
+        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_director/{{r[2]}}'"> </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+</html>

@@ -1,0 +1,31 @@
+<html>
+<head><title>Browse movie_cast </title></head>
+
+<h1> <a href="/"> Index page </a> </h1>
+
+<h3><a href='/search_actor_movie_cast'>Search actor in movie_cast table</a></h3>
+<h3><a href='/search_movie_movie_cast'>Search movie in movie_cast table</a></h3>
+
+
+<h3>Current movie_cast table</h3>
+<table border='1'>
+    <thead>
+        <th>movie_title</th>
+        <th>actor_fname</th>
+        <th>actor_lname</th>
+        <th>role</th>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td> {{ r.0 }}</td>
+        <td> {{ r[1] }}</td>
+        <td> {{ r[2] }}</td>
+        <td> {{ r[3] }}</td>
+        <td> <input type='button' name='Update' value='Update' onclick="window.location = '/update_director/{{r[4]}}'"> </td>
+        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_director/{{r[4]}}'"> </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+</html>
