@@ -1,0 +1,10 @@
+<h3>update the director:</h3>
+<form id="update_director" action="/update_director/{{director[0]}}" method="post">
+  <!-- character_id {{ character_id }} -->
+  <input type="hidden" name="director_id" value = "{{ director[0] }}">
+  First name: <input type="text" name="fname" value = "{{ director[1] }}"><br>
+  Last name: <input type="text" name="lname" value = "{{ director[2] }}" ><br>
+
+    <input type="submit" value="Submit">
+ </form>
+<br/>

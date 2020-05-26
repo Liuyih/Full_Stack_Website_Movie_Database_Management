@@ -35,7 +35,8 @@ def add_new_actor():
         query = 'INSERT INTO actor (fname, lname) VALUES (%s,%s);'
         data = (fname, lname)
         execute_query(db_connection, query, data)
-        return ('actor added!')
+
+        return redirect('/browse_actor')
 
 #the app for deleting one actor in a specific row
 @webapp.route('/delete_actor/<int:id>')
@@ -47,7 +48,38 @@ def delete_actor(id):
     data = (id,)
 
     result = execute_query(db_connection, query, data)
-    return (str(result.rowcount) + "row deleted")
+
+    return redirect('/browse_actor')
+
+#display update form and process any updates, using the same function
+@webapp.route('/update_actor/<int:id>', methods=['POST','GET'])
+def update_actor(id):
+    print('update a actor')
+    db_connection = connect_to_database()
+    #display existing data
+    if request.method == 'GET':
+        print('The GET request')
+        actor_query = 'SELECT actor_id, fname, lname from actor WHERE actor_id = %s'  % (id)
+        actor_result = execute_query(db_connection, actor_query).fetchone()
+
+        if actor_result == None:
+            return "No such person found!"
+
+        print('Returning the update html page')
+        return render_template('actor_update.html', actor = actor_result)
+    elif request.method == 'POST':
+        print('The POST request')
+        actor_id = request.form['actor_id']
+        fname = request.form['fname']
+        lname = request.form['lname']
+
+
+        query = "UPDATE actor SET fname = %s, lname = %s WHERE actor_id = %s"
+        data = (fname,lname,actor_id)
+        result = execute_query(db_connection, query, data)
+        print(str(result.rowcount) + " row(s) updated")
+
+        return redirect('/browse_actor')
 
 #the app for searching one specific actor from user's input
 @webapp.route('/search_actor', methods=['POST','GET'])
@@ -60,7 +92,7 @@ def search_actor():
         fname = request.form['fname']
         lname = request.form['lname']
 
-        query = "SELECT actor_id, fname, lname from actor WHERE fname = %s and lname = %s ;"
+        query = "SELECT fname, lname, actor_id from actor WHERE fname = %s and lname = %s ;"
         data = (fname,lname)
         result = execute_query(db_connection, query, data).fetchall()
         print(result)
@@ -92,7 +124,7 @@ def add_new_director():
         query = 'INSERT INTO director (fname, lname) VALUES (%s,%s)'
         data = (fname, lname)
         execute_query(db_connection, query, data)
-        return ('director added!')
+        return redirect('/browse_director')
 
 #the app for deleting one actor in a specific row
 @webapp.route('/delete_director/<int:id>')
@@ -104,7 +136,37 @@ def delete_director(id):
     data = (id,)
 
     result = execute_query(db_connection, query, data)
-    return (str(result.rowcount) + "row deleted")
+    return redirect('/browse_director')
+
+#display update form and process any updates, using the same function
+@webapp.route('/update_director/<int:id>', methods=['POST','GET'])
+def update_director(id):
+    print('update a director')
+    db_connection = connect_to_database()
+    #display existing data
+    if request.method == 'GET':
+        print('The GET request')
+        director_query = 'SELECT director_id, fname, lname from director WHERE director_id = %s'  % (id)
+        director_result = execute_query(db_connection, director_query).fetchone()
+
+        if director_result == None:
+            return "No such person found!"
+
+        print('Returning the update html page')
+        return render_template('director_update.html', director = director_result)
+    elif request.method == 'POST':
+        print('The POST request')
+        director_id = request.form['director_id']
+        fname = request.form['fname']
+        lname = request.form['lname']
+
+
+        query = "UPDATE director SET fname = %s, lname = %s WHERE director_id = %s"
+        data = (fname,lname,director_id)
+        result = execute_query(db_connection, query, data)
+        print(str(result.rowcount) + " row(s) updated")
+
+        return redirect('/browse_director')
 
 #the app for searching a director from user's input
 @webapp.route('/search_director', methods=['POST','GET'])
@@ -117,7 +179,7 @@ def search_director():
         fname = request.form['fname']
         lname = request.form['lname']
 
-        query = "SELECT director_id, fname, lname from director WHERE fname = %s and lname = %s ;"
+        query = "SELECT  fname, lname, director_id from director WHERE fname = %s and lname = %s ;"
         data = (fname,lname)
         result = execute_query(db_connection, query, data).fetchall()
         print(result)
@@ -129,7 +191,7 @@ def search_director():
 def browse_movie():
     print("Fetching and rendering people web page")
     db_connection = connect_to_database()
-    query = "SELECT movie_id, title, release_date from movie;"
+    query = "SELECT title, release_date, movie_id from movie;"
     result = execute_query(db_connection, query).fetchall()
     print(result)
     return render_template('movie_browse.html', rows=result)
@@ -147,7 +209,48 @@ def add_new_movie():
         query = 'INSERT INTO movie (title, release_date) VALUES (%s,%s)'
         data = (title, release_date)
         execute_query(db_connection, query, data)
-        return ('movie added!')
+        return redirect('/browse_movie')
+#the app for deleting one actor in a specific row
+@webapp.route('/delete_movie/<int:id>')
+def delete_movie(id):
+    '''deletes a actor with the given id'''
+    print ('delete a movie')
+    db_connection = connect_to_database()
+    query = "DELETE FROM movie WHERE movie_id = %s"
+    data = (id,)
+
+    result = execute_query(db_connection, query, data)
+    return redirect('/browse_movie')
+
+@webapp.route('/update_movie/<int:id>', methods=['POST','GET'])
+def update_movie(id):
+    print('update a movie')
+    db_connection = connect_to_database()
+    #display existing data
+    if request.method == 'GET':
+        print('The GET request')
+        movie_query = 'SELECT movie_id, title, release_date from movie WHERE movie_id = %s'  % (id)
+        movie_result = execute_query(db_connection, movie_query).fetchone()
+
+        if movie_result == None:
+            return "No such movie found!"
+
+        print('Returning the update html page')
+        return render_template('movie_update.html', movie = movie_result)
+    elif request.method == 'POST':
+        print('The POST request')
+        movie_id = request.form['movie_id']
+        title = request.form['title']
+        release_date = request.form['release_date']
+
+
+        query = "UPDATE movie SET title = %s, release_date = %s WHERE movie_id = %s"
+        data = (title,release_date,movie_id)
+        result = execute_query(db_connection, query, data)
+        print(str(result.rowcount) + " row(s) updated")
+
+        return redirect('/browse_movie')
+
 #the app for searching a movie with user's input
 @webapp.route('/search_movie', methods=['POST','GET'])
 def search_movie():
@@ -173,6 +276,7 @@ def browse_movie_cast():
     result = execute_query(db_connection, query).fetchall()
     print(result)
     return render_template('movie_cast_browse.html', rows=result)
+
 #the app for searching a actor in the movie cast table
 @webapp.route('/search_actor_movie_cast', methods=['POST','GET'])
 def search_movie_cast():
@@ -206,41 +310,3 @@ def search_movie_movie_cast():
         result = execute_query(db_connection, query, data).fetchall()
         print(result)
         return render_template('movie_cast_browse.html', rows=result)
-
-
-
-
-
-#display update form and process any updates, using the same function
-@webapp.route('/update_people/<int:id>', methods=['POST','GET'])
-def update_people(id):
-    print('In the function')
-    db_connection = connect_to_database()
-    #display existing data
-    if request.method == 'GET':
-        print('The GET request')
-        people_query = 'SELECT id, fname, lname, homeworld, age from bsg_people WHERE id = %s'  % (id)
-        people_result = execute_query(db_connection, people_query).fetchone()
-
-        if people_result == None:
-            return "No such person found!"
-
-        planets_query = 'SELECT id, name from bsg_planets'
-        planets_results = execute_query(db_connection, planets_query).fetchall()
-
-        print('Returning')
-        return render_template('people_update.html', planets = planets_results, person = people_result)
-    elif request.method == 'POST':
-        print('The POST request')
-        character_id = request.form['character_id']
-        fname = request.form['fname']
-        lname = request.form['lname']
-        age = request.form['age']
-        homeworld = request.form['homeworld']
-
-        query = "UPDATE bsg_people SET fname = %s, lname = %s, age = %s, homeworld = %s WHERE id = %s"
-        data = (fname, lname, age, homeworld, character_id)
-        result = execute_query(db_connection, query, data)
-        print(str(result.rowcount) + " row(s) updated")
-
-        return redirect('/browse_bsg_people')

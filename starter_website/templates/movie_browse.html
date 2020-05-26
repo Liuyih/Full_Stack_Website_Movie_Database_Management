@@ -17,11 +17,12 @@
     <tbody>
       {% for r in rows %}
       <tr>
+        <td> {{ r[2] }}</td>
         <td> {{ r.0 }}</td>
         <td> {{ r[1] }}</td>
-        <td> {{ r[2] }}</td>
-        <td> <input type='button' name='Update' value='Update' onclick="window.location = '/update_director/{{r[3]}}'"> </td>
-        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_director/{{r[3]}}'"> </td>
+
+        <td> <input type='button' name='Update' value='Update' onclick="window.location = '/update_movie/{{r[2]}}'"> </td>
+        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_movie/{{r[2]}}'"> </td>
       </tr>
       {% endfor %}
     </tbody>

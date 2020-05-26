@@ -1,0 +1,10 @@
+<h3>update the movie:</h3>
+<form id="update_movie" action="/update_movie/{{movie[0]}}" method="post">
+  <!-- character_id {{ character_id }} -->
+  <input type="hidden" name="movie_id" value = "{{ movie[0] }}">
+  Movie Title: <input type="text" name="title" value = "{{ movie[1] }}"><br>
+  Release_Date: <input type="text" name="release_date" value = "{{ movie[2] }}" ><br>
+
+    <input type="submit" value="Submit">
+ </form>
+<br/>
