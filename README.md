@@ -1,3 +1,6 @@
+The wesite now is running on http://flip3.engr.oregonstate.edu:6688/ , make sure to login the OSU vpn to view the website.
+
+
 # Using Python Flask on the Engineering Servers
 
 
