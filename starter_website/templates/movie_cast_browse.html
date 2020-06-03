@@ -2,7 +2,7 @@
 <head><title>Browse movie_cast </title></head>
 
 <h1> <a href="/"> Index page </a> </h1>
-
+<h3> <a href="/add_new_movie_cast"> Add a new movie_cast relationship </a> </h3>
 <h3><a href='/search_actor_movie_cast'>Search actor in movie_cast table</a></h3>
 <h3><a href='/search_movie_movie_cast'>Search movie in movie_cast table</a></h3>
 
@@ -10,6 +10,8 @@
 <h3>Current movie_cast table</h3>
 <table border='1'>
     <thead>
+        <th>movie_id</th>
+        <th>actor_id</th>
         <th>movie_title</th>
         <th>actor_fname</th>
         <th>actor_lname</th>
@@ -22,8 +24,11 @@
         <td> {{ r[1] }}</td>
         <td> {{ r[2] }}</td>
         <td> {{ r[3] }}</td>
-        <td> <input type='button' name='Update' value='Update' onclick="window.location = '/update_director/{{r[4]}}'"> </td>
-        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_director/{{r[4]}}'"> </td>
+        <td> {{ r[4] }}</td>
+        <td> {{ r[5] }}</td>
+
+        <td> <input type='button' name='Delete' value='Delete' onclick="window.location = '/delete_movie_cast/({{r.0}},{{r[1]}})'"> </td>
+        <td><a href='#' onclick='javascript: alert("not update funtion here since I met the requirements already.")'>Update</a></td>
       </tr>
       {% endfor %}
     </tbody>

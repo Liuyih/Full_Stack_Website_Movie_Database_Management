@@ -191,7 +191,7 @@ def search_director():
 def browse_movie():
     print("Fetching and rendering people web page")
     db_connection = connect_to_database()
-    query = "SELECT title, release_date, movie_id from movie;"
+    query = "SELECT movie.movie_id, title, release_date, director.fname, director.lname from movie left JOIN movie_direct on movie.movie_id = movie_direct.movie_id left JOIN director on movie_direct.director_id = director.director_id;"
     result = execute_query(db_connection, query).fetchall()
     print(result)
     return render_template('movie_browse.html', rows=result)
@@ -260,7 +260,7 @@ def search_movie():
     elif request.method == 'POST':
         print("found the movie")
         title = request.form['title']
-        query = "SELECT movie_id, title, release_date from movie WHERE title = %s;"
+        query = "SELECT movie.movie_id, title, release_date, director.fname, director.lname from movie left JOIN movie_direct on movie.movie_id = movie_direct.movie_id left JOIN director on movie_direct.director_id = director.director_id WHERE title = %s;"
         data = (title,)
         result = execute_query(db_connection, query, data).fetchall()
         print(result)
@@ -272,10 +272,48 @@ def search_movie():
 def browse_movie_cast():
     print("Fetching and rendering people web page")
     db_connection = connect_to_database()
-    query = "SELECT title,fname,lname,role FROM actor JOIN movie_cast ON actor.actor_id=movie_cast.actor_id JOIN movie ON movie_cast.movie_id=movie.movie_id;"
+    query = "SELECT movie_cast.movie_id, movie_cast.actor_id, title,fname,lname,role FROM actor JOIN movie_cast ON actor.actor_id=movie_cast.actor_id JOIN movie ON movie_cast.movie_id=movie.movie_id;"
     result = execute_query(db_connection, query).fetchall()
     print(result)
     return render_template('movie_cast_browse.html', rows=result)
+
+#the app for adding a new movie_cast relationship into database
+@webapp.route('/add_new_movie_cast', methods=['POST','GET'])
+def add_new_movie_cast():
+    db_connection = connect_to_database()
+    if request.method == 'GET':
+        actor_query= "SELECT actor.actor_id, actor.fname,actor.lname FROM actor;"
+        movie_query= "SELECT movie.movie_id, movie.title FROM movie;"
+        actorList = execute_query(db_connection, actor_query).fetchall()
+        movieList = execute_query(db_connection, movie_query).fetchall()
+        print (actorList)
+        print (movieList)
+        return render_template('movie_cast_add_new.html', actors = actorList, movies = movieList)
+    elif request.method == 'POST':
+        print("add a movie cast relationship!")
+        actor_id = request.form['actor_id']
+        movie_id = request.form['movie_id']
+        role = request.form['role']
+        query = 'INSERT INTO `movie_cast`(`actor_id`, `movie_id`, `role`) VALUES (%s,%s,%s)'
+        data = (actor_id,movie_id,role)
+        execute_query(db_connection, query, data)
+        return redirect('/browse_movie_cast')
+
+#the app for deleting one movie_cast relationship in a specific row
+@webapp.route('/delete_movie_cast/(<int:mid>,<int:aid>)')
+def delete_movie_cast(mid,aid):
+    '''deletes a actor with the given id'''
+    print ('delete a movie_cast relationship')
+    db_connection = connect_to_database()
+    query = "DELETE FROM movie_cast WHERE movie_id = %s AND actor_id = %s;"
+    data = (mid,aid)
+    print(data)
+
+    result = execute_query(db_connection, query, data)
+    return redirect('/browse_movie_cast')
+
+
+
 
 #the app for searching a actor in the movie cast table
 @webapp.route('/search_actor_movie_cast', methods=['POST','GET'])
@@ -288,7 +326,7 @@ def search_movie_cast():
         fname = request.form['fname']
         lname = request.form['lname']
 
-        query = "SELECT title,fname,lname,role FROM actor JOIN movie_cast ON actor.actor_id=movie_cast.actor_id JOIN movie ON movie_cast.movie_id=movie.movie_id WHERE fname = %s and lname = %s"
+        query = "SELECT movie_cast.movie_id, movie_cast.actor_id, title,fname,lname,role FROM actor JOIN movie_cast ON actor.actor_id=movie_cast.actor_id JOIN movie ON movie_cast.movie_id=movie.movie_id WHERE fname = %s and lname = %s"
         data = (fname,lname)
         result = execute_query(db_connection, query, data).fetchall()
         print(result)
@@ -305,7 +343,7 @@ def search_movie_movie_cast():
         title = request.form['title']
 
 
-        query = "SELECT title,fname,lname,role FROM actor JOIN movie_cast ON actor.actor_id=movie_cast.actor_id JOIN movie ON movie_cast.movie_id=movie.movie_id WHERE title = %s"
+        query = "SELECT movie_cast.movie_id, movie_cast.actor_id, title,fname,lname,role FROM actor JOIN movie_cast ON actor.actor_id=movie_cast.actor_id JOIN movie ON movie_cast.movie_id=movie.movie_id WHERE title = %s"
         data = (title,)
         result = execute_query(db_connection, query, data).fetchall()
         print(result)

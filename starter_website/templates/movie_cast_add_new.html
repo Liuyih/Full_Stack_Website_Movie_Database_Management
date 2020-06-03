@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<form action="/add_new_movie_cast" method="post">
+		<header>add a movie cast relationship with a corresponding role:</header>
+
+
+    Actor:
+      <select name='actor_id'>
+        {% for a in actors %}
+        <option value='{{ a[0] }}' >{{ a[1] }} {{ a[2] }}</option>
+        {% endfor %}
+      </select><br>
+
+     Movie:
+      <select name='movie_id'>
+        {% for m in movies %}
+        <option value='{{ m[0] }}' >{{ m[1] }}</option>
+        {% endfor %}
+      </select><br>
+
+
+			Role:
+			<input type="text" name="role" ><br>
+
+		<input type="submit">
+	</form>
+
+
+
+</html>
