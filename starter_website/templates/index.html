@@ -27,21 +27,21 @@
 </div>
 <div class="col-sm-3">
 <h3> <a href = '/browse_director'> browse_director </a> </h3>
-<p> under actor section, you can view the current_director in the database, you can also add, update and delete a director. </p>
+<p> under director section, you can view the current_director in the database, you can also add, update and delete a director. </p>
 
 </div>
 
 <div class="col-sm-3">
 
 <h3> <a href = '/browse_movie'> browse_movie  </a> </h3>
-<p> under movie section, you can view the current_movie in the database, you can also add, update and delete a movie. </p>
+<p> under movie section, you can view the current_movie in the database, you can also add, update and delete a movie.(1:M relationship with director table) the movie can have 0 or 1 director but director can direct 0 or many movies. </p>
 
 </div>
 
 <div class="col-sm-3">
 <h3> <a href= "/browse_movie_cast"> browse_movie_cast </a> </h3>
 
-<p> under movie_cast section, you can search for the movies that the specific actor has casted before , or you can search for the actors in the specific movie  </p>
+<p> under movie_cast section, you can search for the movies that the specific actor has casted before , or you can search for the actors in the specific movie(m:m releationsip implementation)  </p>
 </div>
 
 </div>
